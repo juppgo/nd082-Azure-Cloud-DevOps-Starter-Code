@@ -9,8 +9,8 @@ data "azurerm_resource_group" "rg" {
 resource "azurerm_virtual_network" "vnet" {
   name                = "${var.prefix}-vnet"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   tags = {
     project = "${var.prefix}"
   }
@@ -18,7 +18,7 @@ resource "azurerm_virtual_network" "vnet" {
 
 resource "azurerm_subnet" "sn" {
   name                 = "${var.prefix}-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
+  resource_group_name  = data.azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["10.0.0.0/16"]
 }
@@ -26,8 +26,8 @@ resource "azurerm_subnet" "sn" {
 resource "azurerm_network_interface" "nic" {
   count               = var.vm_number
   name                = "${var.prefix}-nic-${count.index}"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
 
   ip_configuration {
     name                          = "internal"
@@ -41,8 +41,8 @@ resource "azurerm_network_interface" "nic" {
 
 resource "azurerm_network_security_group" "nsg" {
   name                = "${var.prefix}-nsg"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
   tags = {
     project = "${var.prefix}"
   }
@@ -58,7 +58,7 @@ resource "azurerm_network_security_rule" "nsr-allow-inbound-internal" {
   destination_port_range      = "*"
   source_address_prefix       = "10.0.0.0/16"
   destination_address_prefix  = "10.0.0.0/16"
-  resource_group_name         = azurerm_resource_group.rg.name
+  resource_group_name         = data.azurerm_resource_group.rg.name
   network_security_group_name = azurerm_network_security_group.rg.name
 }
 
@@ -72,7 +72,7 @@ resource "azurerm_network_security_rule" "nsr-allow-outbound-internal" {
   destination_port_range      = "*"
   source_address_prefix       = "10.0.0.0/16"
   destination_address_prefix  = "10.0.0.0/16"
-  resource_group_name         = azurerm_resource_group.rg.name
+  resource_group_name         = data.azurerm_resource_group.rg.name
   network_security_group_name = azurerm_network_security_group.rg.name
 }
 
@@ -86,15 +86,15 @@ resource "azurerm_network_security_rule" "nsr-deny-inbound-external" {
   destination_port_range      = "*"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.rg.name
+  resource_group_name         = data.azurerm_resource_group.rg.name
   network_security_group_name = azurerm_network_security_group.rg.name
 }
 
 
 resource "azurerm_public_ip" "pip" {
   name                = "${var.prefix}-pip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
   allocation_method   = "Static"
 
   tags = {
@@ -104,8 +104,8 @@ resource "azurerm_public_ip" "pip" {
 
 resource "azurerm_lb" "lb" {
   name                = "${var.prefix}-lb"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
@@ -131,8 +131,8 @@ resource "azurerm_network_interface_backend_address_pool_association" "nic_b_ap_
 
 resource "azurerm_availability_set" "as" {
   name                = "${var.prefix}-aset"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   tags = {
     project = "${var.prefix}"
   }
@@ -141,8 +141,8 @@ resource "azurerm_availability_set" "as" {
 resource "azurerm_linux_virtual_machine" "vm" {
   count                           = var.vm_number
   name                            = "${var.prefix}-vm-${count.index}"
-  resource_group_name             = azurerm_resource_group.rg.name
-  location                        = azurerm_resource_group.rg.location
+  resource_group_name             = data.azurerm_resource_group.rg.name
+  location                        = data.azurerm_resource_group.rg.location
   size                            = "Standard_D2s_v3"
   admin_username                  = var.username
   admin_password                  = var.password
@@ -164,8 +164,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
 resource "azurerm_managed_disk" "md" {
   count                = var.vm_number
   name                 = "${var.prefix}-md-${count.index}"
-  location             = azurerm_resource_group.rg.location
-  resource_group_name  = azurerm_resource_group.rg.name
+  location             = data.azurerm_resource_group.rg.location
+  resource_group_name  = data.azurerm_resource_group.rg.name
   storage_account_type = "Standard_LRS"
   create_option        = "Empty"
   disk_size_gb         = "1"
