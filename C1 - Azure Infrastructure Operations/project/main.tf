@@ -24,7 +24,7 @@ resource "azurerm_subnet" "sn" {
 }
 
 resource "azurerm_network_interface" "nic" {
-  count = var.vm_number
+  count               = var.vm_number
   name                = "${var.prefix}-nic-${count.index}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
@@ -97,7 +97,7 @@ resource "azurerm_public_ip" "pip" {
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Static"
 
-tags = {
+  tags = {
     project = "${var.prefix}"
   }
 }
@@ -123,7 +123,7 @@ resource "azurerm_lb_backend_address_pool" "lb_ap" {
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "nic_b_ap_a" {
-  count = var.vm_number
+  count                   = var.vm_number
   network_interface_id    = azurerm_network_interface.nic.id
   ip_configuration_name   = "${var.prefix}-testconfiguration1"
   backend_address_pool_id = element(azurerm_lb_backend_address_pool.lb_ap.*.id, count.index)
@@ -139,7 +139,7 @@ resource "azurerm_availability_set" "as" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  count = var.vm_number
+  count                           = var.vm_number
   name                            = "${var.prefix}-vm-${count.index}"
   resource_group_name             = azurerm_resource_group.rg.name
   location                        = azurerm_resource_group.rg.location
@@ -162,7 +162,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 }
 
 resource "azurerm_managed_disk" "md" {
-  count = var.vm_number
+  count                = var.vm_number
   name                 = "${var.prefix}-md-${count.index}"
   location             = azurerm_resource_group.rg.location
   resource_group_name  = azurerm_resource_group.rg.name
