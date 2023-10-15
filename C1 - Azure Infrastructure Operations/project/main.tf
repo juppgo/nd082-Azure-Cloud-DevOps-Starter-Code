@@ -48,7 +48,7 @@ resource "azurerm_network_security_group" "nsg" {
   }
 }
 
-resource "azurerm_network_security_rule" "nsr-inbound" {
+resource "azurerm_network_security_rule" "nsr-allow-inbound-internal" {
   name                        = "allow_internal_inbound"
   priority                    = 100
   direction                   = "Inbound"
@@ -62,7 +62,7 @@ resource "azurerm_network_security_rule" "nsr-inbound" {
   network_security_group_name = azurerm_network_security_group.rg.name
 }
 
-resource "azurerm_network_security_rule" "nsr-outbound" {
+resource "azurerm_network_security_rule" "nsr-allow-outbound-internal" {
   name                        = "allow_internal_outbound"
   priority                    = 101
   direction                   = "Outbound"
@@ -76,7 +76,7 @@ resource "azurerm_network_security_rule" "nsr-outbound" {
   network_security_group_name = azurerm_network_security_group.rg.name
 }
 
-resource "azurerm_network_security_rule" "nsr-inbound" {
+resource "azurerm_network_security_rule" "nsr-deny-inbound-external" {
   name                        = "deny_external_inbound"
   priority                    = 102
   direction                   = "Inbound"
