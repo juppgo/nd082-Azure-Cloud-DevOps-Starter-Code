@@ -51,12 +51,12 @@ Submit and Terraform will create the specified number of virtual machines in Azu
 ### Output
 Upon successfully running the Packer and Terraform templates, you can expect the following:
 - A policy to deny deployment without tagging. ![Alt text](screenshots/policy_output.png)
-- Packer will create a managed image in your Azure subscription.
+- Packer will create a managed image in your Azure subscription. ![Alt text](screenshots/packer_build_output.png)
 
 - Terraform will create the number of virtual machines as specified in the vars.tf, based on the Packer image, a load balancer, network security groups, and other necessary infrastructure components.
 
 **NOTE: Output might be different if you change the variables.**
-- Expected plan output:
+- Expected terraform plan output:
 ![Alt text](screenshots/terraform_plan_output.png)
-- Expected apply output:
+- Expected terraform apply output:
 ![Alt text](screenshots/terraform_apply_output.png)
