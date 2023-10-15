@@ -125,7 +125,7 @@ resource "azurerm_lb_backend_address_pool" "lb_ap" {
 resource "azurerm_network_interface_backend_address_pool_association" "nic_b_ap_a" {
   count                   = var.vm_number
   network_interface_id    = azurerm_network_interface.nic[count.index].id
-  ip_configuration_name   = "${var.prefix}-testconfiguration1"
+  ip_configuration_name   = "internal"
   backend_address_pool_id = element(azurerm_lb_backend_address_pool.lb_ap.*.id, count.index)
 }
 
