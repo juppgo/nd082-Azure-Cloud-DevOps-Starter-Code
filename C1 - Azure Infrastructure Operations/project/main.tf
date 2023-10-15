@@ -124,7 +124,7 @@ resource "azurerm_lb_backend_address_pool" "lb_ap" {
 
 resource "azurerm_network_interface_backend_address_pool_association" "nic_b_ap_a" {
   count                   = var.vm_number
-  network_interface_id    = azurerm_network_interface.nic.id
+  network_interface_id    = azurerm_network_interface.nic[count.index].id
   ip_configuration_name   = "${var.prefix}-testconfiguration1"
   backend_address_pool_id = element(azurerm_lb_backend_address_pool.lb_ap.*.id, count.index)
 }
@@ -147,10 +147,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
   admin_username                  = var.username
   admin_password                  = var.password
   disable_password_authentication = false
+  source_image_id                 = var.image_id
+  availability_set_id             = azurerm_availability_set.as.id
   network_interface_ids = [
     azurerm_network_interface.nic[count.index].id,
   ]
-  source_image_id = data.azurerm_image.custom_image.id
 
   os_disk {
     storage_account_type = "Standard_LRS"
