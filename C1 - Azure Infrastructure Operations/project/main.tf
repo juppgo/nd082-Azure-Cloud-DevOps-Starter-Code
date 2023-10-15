@@ -59,7 +59,7 @@ resource "azurerm_network_security_rule" "nsr-allow-inbound-internal" {
   source_address_prefix       = "10.0.0.0/16"
   destination_address_prefix  = "10.0.0.0/16"
   resource_group_name         = data.azurerm_resource_group.rg.name
-  network_security_group_name = azurerm_network_security_group.rg.name
+  network_security_group_name = azurerm_network_security_group.nsg.name
 }
 
 resource "azurerm_network_security_rule" "nsr-allow-outbound-internal" {
@@ -73,7 +73,7 @@ resource "azurerm_network_security_rule" "nsr-allow-outbound-internal" {
   source_address_prefix       = "10.0.0.0/16"
   destination_address_prefix  = "10.0.0.0/16"
   resource_group_name         = data.azurerm_resource_group.rg.name
-  network_security_group_name = azurerm_network_security_group.rg.name
+  network_security_group_name = azurerm_network_security_group.nsg.name
 }
 
 resource "azurerm_network_security_rule" "nsr-deny-inbound-external" {
@@ -87,7 +87,7 @@ resource "azurerm_network_security_rule" "nsr-deny-inbound-external" {
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
   resource_group_name         = data.azurerm_resource_group.rg.name
-  network_security_group_name = azurerm_network_security_group.rg.name
+  network_security_group_name = azurerm_network_security_group.nsg.name
 }
 
 
