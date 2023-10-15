@@ -3,3 +3,8 @@
 
 # Local .terraform directories
 **/.terraform/*
+
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.terraform.lock.hcl
